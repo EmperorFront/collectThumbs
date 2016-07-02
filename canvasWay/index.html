@@ -1,173 +1,138 @@
 <!DOCTYPE html>
-     <html lang="en" >
-         <head>
-                 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
-                 <meta charset="utf-8" />
-                 <title>皇叔好帅</title>
-             </head>
-         <body style="margin: 0px;">
-             <div class="container">
-                     <canvas
-                             onmousemove="hammerMove(this);"
-                             onmousedown="hammerDown();" onmouseUp="hammerUp();"
-                             id="screen" ></canvas>
-                 </div>
+<html lang="en" >
+<head>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+    <meta charset="utf-8" />
+    <title>皇叔好帅</title>
+</head>
+<body style="margin: 0px;">
+<div class="container">
+    <canvas
+            onmousemove="hammerMove(this);"
+            onmousedown="hammerDown();" onmouseUp="hammerUp();"
+            id="screen" ></canvas>
+</div>
 
-             <div style="display: none" id="info"></div>
-         </body>
-     </html>
+<div style="display: none" id="info"></div>
+</body>
+</html>
 
 
 <script src="jquery-3.0.0.js"></script>
 <script>
     //十秒数
-  var countPer10s = 10;
+    var countPer10s = 10;
     //下降速
-  var downSpeed = 20;
+    var downSpeed = 20;
     //帧
-  var fps = 30;
+    var fps = 30;
+    var canvas, ctx, info;
+    var bg;
+    var hammer, hamX, hamY;
+    var mouseState, mouseFrmLen = 10, mousePress = false;
+    var sprites = [], holes = [];
+    var score = 0;
+    $(function(){
+        init();
+    });
+    function init(){
+        //设置初始状态
+        var screen = $('#screen');
+        screen.attr("width",$(window).get(0).innerWidth);
+        screen.attr("height",$(window).get(0).innerHeight);
+        //这个设计的不合理
+        info = document.getElementById('info');
 
-  var canvas, ctx, info;
-  var bg;
-  var hammer, hamX, hamY;
-  var mouseState, mouseFrmLen = 10, mousePress = false;
-  var sprites = [], holes = [];
-  var score = 0;
-
-  $(function(){
-      init();
-  });
-  function init(){
-      //设置初始状态
-      var screen = $('#screen');
-      screen.attr("width",$(window).get(0).innerWidth);
-      screen.attr("height",$(window).get(0).innerHeight);
-
-      //这个设计的不合理
-      info = document.getElementById('info');
-      
-      canvas = document.getElementById('screen');
-      ctx = canvas.getContext('2d');
-
-      bg = new Image();
-      bg.src = 'bg.jpg';
-
-      var msImg = new Image();
-      msImg.src = 'sprite.png';
-
-      //绑在这里防止报错
-      msImg.onload = function(){
-          setInterval(function(){
-              sprites.push(new createSprite(60, 70, msImg));
-          }, 10000/countPer10s);
-      }
-
-      setInterval(drawScreen, 1000/fps);
-      setInterval(updateLogic, 3000);
-
-  };
-
-  function createSprite (w,h,image){
-      this.w = w;
-      this.h = h;
-      this.x = Math.random() * $(window).get(0).innerWidth;
-      this.y = 80;
-      this.image = image;
-      this.state = 'show';
-
-      this.draw = function(){
-          if(this.state == 'show'){
-              this.y = this.y + 1/fps*(downSpeed);
-              ctx.drawImage(this.image, this.x, this.y, this.w, this.h);
-          }
-      }
-  }
-
-//  var Sprite = function(w, h, x, y, state, image){
-//      var self = this;
-//      this.w = w;
-//      this.h = h;
-//      this.x = x;
-//      this.y = y;
-//      this.image = image;
-//      this.state = state;
-//
-//      this.draw = function(){
-//          if(this.state == 'show'){
-//              ctx.drawImage(this.image, this.x, this.y, this.w, this.h);
-//              setTimeout(function(){
-//                  self.state = 'hide';
-//              },3000);
-//          }
-//      }
-//  }
-
-  function clearScreen(){
-      //ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-      ctx.drawImage(bg, 0, 0, ctx.canvas.width, ctx.canvas.height);
-  }
-
-  function drawScreen(){
-      clearScreen();
-
-      //绘制得分
-
-      ctx.font = "40px serif"
-      ctx.strokeStyle = "#FF00ff";
-      ctx.strokeText ("皇叔好帅", 50,50);
-      ctx.fillStyle = "#000000";
-      ctx.fillText("皇叔好帅",50,50);
-
-      ctx.fillStyle = "#ff0000";
-      ctx.fillText("你的得分:"+score,50,100);
-
-      for(i=0;i<sprites.length;i++){
-              sprites[i].draw();
-      }
-  }
-
-  function updateLogic(){
-
-      for(i=0;i<sprites.length;i++){
-              sprites[i].state=='hide'
-      }
-
-      var a = Math.round(Math.random()*100)%3;
+        canvas = document.getElementById('screen');
+        ctx = canvas.getContext('2d');
+        bg = new Image();
+        bg.src = 'bg.jpg';
+        var msImg = new Image();
+        msImg.src = 'sprite.png';
+        //绑在这里防止报错
+        msImg.onload = function(){
+            setInterval(function(){
+                sprites.push(new createSprite(69, 99, msImg));
+            }, 10000/countPer10s);
+        }
+        setInterval(drawScreen, 1000/fps);
+        setInterval(updateLogic, 3000);
+    };
+    function createSprite (w,h,image){
+        this.w = w;
+        this.h = h;
+        this.x = Math.random() * $(window).get(0).innerWidth;
+        this.y = 80;
+        this.image = image;
+        this.state = 'show';
+        this.draw = function(){
+            if(this.state == 'show'){
+                this.y = this.y + 1/fps*(downSpeed);
+                ctx.drawImage(this.image, this.x, this.y, this.w, this.h);
+            }
+        }
+    }
+    //  var Sprite = function(w, h, x, y, state, image){
+    //      var self = this;
+    //      this.w = w;
+    //      this.h = h;
+    //      this.x = x;
+    //      this.y = y;
+    //      this.image = image;
+    //      this.state = state;
+    //
+    //      this.draw = function(){
+    //          if(this.state == 'show'){
+    //              ctx.drawImage(this.image, this.x, this.y, this.w, this.h);
+    //              setTimeout(function(){
+    //                  self.state = 'hide';
+    //              },3000);
+    //          }
+    //      }
+    //  }
+    function clearScreen(){
+        //ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.drawImage(bg, 0, 0, ctx.canvas.width, ctx.canvas.height);
+    }
+    function drawScreen(){
+        clearScreen();
+        //绘制得分
+        ctx.font = "40px serif"
+        ctx.strokeStyle = "#FF00ff";
+        ctx.strokeText ("皇叔好帅", 50,50);
+        ctx.fillStyle = "#000000";
+        ctx.fillText("皇叔好帅",50,50);
+        ctx.fillStyle = "#ff0000";
+        ctx.fillText("你的得分:"+score,50,100);
+        for(i=0;i<sprites.length;i++){
+            sprites[i].draw();
+        }
+    }
+    function updateLogic(){
+        for(i=0;i<sprites.length;i++){
+            sprites[i].state=='hide'
+        }
+        var a = Math.round(Math.random()*100)%3;
 //      sprites[a].state='show';
-  }
-
-
-  function hammerMove(e){
-      if(hammer){
-          hammer.x = event.x-40;
-          hammer.y = event.y-40;
-      }
-  }
-
-  function hit(x, y){
-
-      for(i=0;i<sprites.length;i++){
-              var s = sprites[i];
-
-              if(s.state=='show'){
-                  if(x>s.x+30 && y>s.y && x<(s.x+s.w+30) && y<(s.y+s.h)){
-                      score++;
-                      s.state = 'hide';
-                  }
-              }
-
-      }
-  }
-
-  function hammerDown(){
-      mousePress = true;
-  }
-
-  function hammerUp(){
-
-      info.innerHTML=event.x+':'+event.y;
-      mousePress = false;
-      hit(event.x, event.y);
-  }
-
-   </script>
+    }
+    function hammerMove(e){
+        if(hammer){
+            hammer.x = event.x-40;
+            hammer.y = event.y-40;
+        }
+    }
+    function hit(x, y){
+        for(i=0;i<sprites.length;i++){
+            var s = sprites[i];
+            if(s.state=='show'){
+                if(x>s.x && y>s.y && x<(s.x+s.w) && y<(s.y+s.h)){
+                    score++;
+                    s.state = 'hide';
+                }
+            }
+        }
+    }
+    function hammerDown(){
+        hit(event.x, event.y);
+    }
+</script>
