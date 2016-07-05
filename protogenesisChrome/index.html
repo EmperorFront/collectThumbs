@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body {
+            background: #324242;
+            color: #f3f3f8;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        div {
+            width: 1rem;
+            height: 1rem;
+            background: #f3f3f8;
+            border-radius: 1rem;
+            display: inline-block;
+            margin: 1rem;
+        }
+
+        input {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            border: 2px solid #f3f3f8;
+            border-radius: .4rem;
+            color: #f3f3f8;
+            background: #324242;
+            line-height: 3;
+            padding: 0 1rem;
+            font-size: 1rem;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<script>
+    var a = document.querySelectorAll('div');
+    debugger;
+    //给元素集合转成数组添加forEach方法
+    a = Array.prototype.slice.call(a);
+    a.forEach(function (el, i, ra) {
+        var to = {
+            x: 0,
+            y: Math.random() * 120
+        };
+        el.animate([
+            { transform: 'translate(0,0)' },
+            { transform: 'translate(' + to.x + 'rem,' + to.y + 'rem)' }
+        ], {
+            duration: (Math.random() + 1) * 2000,
+            direction: 'alternate',
+            fill: 'both',
+            iterations: Infinity,
+            easing: 'ease-in-out'
+        });
+    });
+</script>
+</body>
+</html>
