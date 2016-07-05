@@ -20,20 +20,35 @@
         .hide {
             display: none;
         }
+        .score {
+            position: absolute;
+            font-size: 20px;
+        }
     </style>
     <meta charset="UTF-8">
     <title></title>
 </head>
 <body>
+<span class="score">0<span>
 <script src="../jquery-3.0.0.js"></script>
 <script>
     //构造池子
     var html = '';
     var initWidth =  window.screen.width - 60;
     for(var i =0; i < 16 ;i++){
-        html += "<div class='hide' style='left:" + Math.ceil(initWidth * Math.random()) + "px'></div>"
+        html += "<div class='normal-like hide' style='left:" + Math.ceil(initWidth * Math.random()) + "px'></div>"
     }
     $('body').prepend(html);
+
+    //
+    var score = 0;
+    $('.normal-like').click(function(){
+        $(this).addClass('hide normal-score');
+        score++;
+        $('.score').html(score); 
+        $(this).stop();
+
+    });
 
     //move
     function move(nextMove) {
@@ -41,8 +56,8 @@
         var height = 500;
         for(var i = 0 ;i < nextMove.length; i++){
             nextMove[i].removeClass('hide');
-            nextMove[i].animate({top:height+'px'} ,1000 + 3000 * Math.random() ,'linear',function(){
-                $(this).addClass('hide');
+            nextMove[i].animate({top:height+'px'} ,6000 + 3000 * Math.random() ,'linear',function(){
+                if(!$(this).hasClass('hide')){$(this).addClass('hide');}
             });
         }
     }
