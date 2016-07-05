@@ -27,7 +27,7 @@
     //构造池子
     var html = '';
     var initWidth =  window.screen.width - 60;
-    for(var i =0; i < 6 ;i++){
+    for(var i =0; i < 16 ;i++){
         html += "<div style='left:" + Math.ceil(initWidth * Math.random()) + "px'></div>"
     }
     $('body').prepend(html);
@@ -36,7 +36,7 @@
     a = Array.prototype.slice.call(a);
     a.forEach(function (el, i, ra) {
         var height = 800 + 300 * Math.random();
-        $(el).animate({top:height+'px'} ,5000 + 3000 * Math.random() ,'linear',function(){
+        $(el).animate({top:height+'px'} ,1000 + 3000 * Math.random() ,'linear',function(){
             $(this).hide();
         });
     });
