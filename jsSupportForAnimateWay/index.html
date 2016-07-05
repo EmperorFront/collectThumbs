@@ -9,7 +9,6 @@
             text-align: center;
             overflow-x: hidden;
         }
-
         div {
             position: absolute;
             width: 60px;
@@ -17,6 +16,9 @@
             background: #f3f3f8;
             border-radius: 1rem;
             display: inline-block;
+        }
+        .hide {
+            display: none;
         }
     </style>
     <meta charset="UTF-8">
@@ -29,20 +31,33 @@
     var html = '';
     var initWidth =  window.screen.width - 60;
     for(var i =0; i < 6 ;i++){
-        html += "<div style='left:" + Math.ceil(initWidth * Math.random()) + "px'></div>"
+        html += "<div class='hide' style='left:" + Math.ceil(initWidth * Math.random()) + "px'></div>"
     }
     $('body').prepend(html);
-    var a = document.querySelectorAll('div');
-    //给元素集合转成数组添加forEach方法
-    a = Array.prototype.slice.call(a);
-    a.forEach(function (el, i, ra) {
-        var height = 800 + 300 * Math.random();
-        $(el).animate({top:height+'px'} ,1000 + 3000 * Math.random() ,'linear',function(){
-            $(this).hide();
-        });
-    });
+
+    //move
+    function move(nextMove) {
+        var a = nextMove;
+        var height = 500;
+        for(var i = 0 ;i < nextMove.length; i++){
+            nextMove[i].removeClass('hide');
+            nextMove[i].animate({top:height+'px'} ,1000 + 3000 * Math.random() ,'linear',function(){
+                $(this).addClass('hide');
+            });
+        }
+    }
 
     //当选点消失，自己悄悄的异步修改其起始位置即可
+    setInterval(function(){
+        //把消失的点初始化
+        var nextMove = [];
+        $('.hide').each(function(){
+            $(this).css("top","0px");
+            nextMove.push($(this));
+        });
+        //move
+        move(nextMove);
+    },1000);
 </script>
 </body>
 </html>
