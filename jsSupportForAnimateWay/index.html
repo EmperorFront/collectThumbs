@@ -4,15 +4,16 @@
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
     <style>
         body {
-            background: #324242;
             color: #f3f3f8;
             text-align: center;
             overflow-x: hidden;
+            background-image: url("bg-sky.png");
+            background-size: cover;
         }
         div {
             position: absolute;
-            width: 60px;
-            height: 60px;
+            width: 130px;
+            height: 130px;
             background: #f3f3f8;
             border-radius: 1rem;
             display: inline-block;
@@ -24,12 +25,57 @@
             position: absolute;
             font-size: 20px;
         }
+        .normal-like {
+            background-image: url("thumbs.png");
+            background-position: -5px -1190px;
+        }
+        .special-like1 {
+            background-image: url("thumbs.png");
+            background-position: -5px -140px;
+        }
+        .special-like2 {
+            background-image: url("thumbs.png");
+            background-position: -5px -280px;
+        }
+        .special-like3 {
+            background-image: url("thumbs.png");
+            background-position: -5px -420px;
+        }
+        .special-like4 {
+            background-image: url("thumbs.png");
+            background-position: -5px -560px;
+        }
+        .special-like5 {
+            background-image: url("thumbs.png");
+            background-position: -5px -700px;
+        }
+        .special-like6 {
+            background-image: url("thumbs.png");
+            background-position: -5px -840px;
+        }
+        .special-like7 {
+            background-image: url("thumbs.png");
+            background-position: -5px -980px;
+        }
+        .special-like8 {
+            background-image: url("thumbs.png");
+            background-position: -5px -1190px;
+        }
+        .special-like9 {
+            background-image: url("thumbs.png");
+            background-position: -5px -1190px;
+        }
+        .special-like10 {
+            background-image: url("thumbs.png");
+            background-position: -5px -1190px;
+        }
+
     </style>
     <meta charset="UTF-8">
     <title></title>
 </head>
 <body>
-<span class="score">0<span>
+<span class="score">0</span>
 <script src="../jquery-3.0.0.js"></script>
 <script>
     //构造池子
@@ -38,17 +84,26 @@
     for(var i =0; i < 16 ;i++){
         html += "<div class='normal-like hide' style='left:" + Math.ceil(initWidth * Math.random()) + "px'></div>"
     }
+    for (var i =0; i < 5 ;i++){
+        html += "<div class='special-like special-like" + Math.ceil(10 * Math.random()) + " hide' style='left:" + Math.ceil(initWidth * Math.random()) + "px'></div>"
+    }
     $('body').prepend(html);
-
-    //
+    //得分逻辑
     var score = 0;
-    $('.normal-like').click(function(){
+    $('.normal-like').bind('touchstart', function(){
         $(this).addClass('hide normal-score');
         score++;
-        $('.score').html(score); 
+        $('.score').html(score);
         $(this).stop();
-
     });
+
+    $('.special-like').bind('touchstart', function(){
+        $(this).addClass('hide normal-score');
+        score += 10;
+        $('.score').html(score);
+        $(this).stop();
+    });
+
 
     //move
     function move(nextMove) {
