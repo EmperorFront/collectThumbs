@@ -11,11 +11,11 @@
             background-size: cover;
         }
         div {
+            background-image: url("thumbs.png");
             transform:translateZ(0);
             position: absolute;
-            width: 130px;
-            height: 130px;
-            background: #f3f3f8;
+            width: 60px;
+            height: 60px;
             border-radius: 1rem;
             display: inline-block;
         }
@@ -27,50 +27,44 @@
             font-size: 20px;
         }
         .normal-like {
-            background-image: url("thumbs.png");
-            background-position: -5px -1190px;
+            background-position: -5px 77px;
         }
         .special-like1 {
-            background-image: url("thumbs.png");
-            background-position: -5px -140px;
+            background-position:-3px -2px;
         }
         .special-like2 {
-            background-image: url("thumbs.png");
-            background-position: -5px -280px;
+            background-position: -3px -67px;
         }
         .special-like3 {
-            background-image: url("thumbs.png");
-            background-position: -5px -420px;
+            background-position: -2px -135px;
         }
         .special-like4 {
-            background-image: url("thumbs.png");
-            background-position: -5px -560px;
+            background-position: -2px -202px;
         }
         .special-like5 {
-            background-image: url("thumbs.png");
-            background-position: -5px -700px;
+            background-position: -2px -333px;
         }
         .special-like6 {
-            background-image: url("thumbs.png");
-            background-position: -5px -840px;
+            background-position: -2px -400px;
         }
         .special-like7 {
-            background-image: url("thumbs.png");
-            background-position: -5px -980px;
+            background-position: -2px -464px;
         }
         .special-like8 {
-            background-image: url("thumbs.png");
-            background-position: -5px -1190px;
+            background-position: -2px -1190px;
         }
         .special-like9 {
-            background-image: url("thumbs.png");
-            background-position: -5px -1190px;
+            background-position: -2px -1190px;
         }
         .special-like10 {
-            background-image: url("thumbs.png");
-            background-position: -5px -1190px;
+            background-position: -2px -1190px;
         }
-
+        .plus10 {
+            width: 31px;
+            height: 16px;
+            background-position: 0px -585px;
+            display: none;
+        }
     </style>
     <meta charset="UTF-8">
     <title></title>
@@ -88,6 +82,9 @@
     for (var i =0; i < 5 ;i++){
         html += "<div class='special-like special-like" + Math.ceil(10 * Math.random()) + " hide' style='left:" + Math.ceil(initWidth * Math.random()) + "px'></div>"
     }
+    for (var i =0; i < 3 ;i++){
+        html += "<div class='plus10'></div>"
+    }
     $('body').prepend(html);
     //得分逻辑
     var score = 0;
@@ -99,12 +96,18 @@
     });
 
     $('.special-like').bind('touchstart', function(){
+        showScorePlus($(this));
         $(this).addClass('hide normal-score');
         score += 10;
         $('.score').html(score);
         $(this).stop();
     });
-
+    function showScorePlus(_this){
+        var thePlus10 = $('.plus10:first');
+        thePlus10.css({'top':_this.position().top,'left':_this.position().left});
+        thePlus10.fadeToggle('slow');
+        thePlus10.fadeToggle('slow');
+    }
 
     //move
     function move(nextMove) {
@@ -112,13 +115,14 @@
         var height = 500;
         for(var i = 0 ;i < nextMove.length; i++){
             nextMove[i].removeClass('hide');
-            nextMove[i].animate({top:height+'px'} ,6000 + 3000 * Math.random() ,'linear',function(){
+            nextMove[i].animate({top:height+'px'} ,1000 + 3000 * Math.random() ,'linear',function(){
                 if(!$(this).hasClass('hide')){$(this).addClass('hide');}
             });
         }
     }
 
     //当选点消失，自己悄悄的异步修改其起始位置即可
+    //研究，这里的操作能否分多个帧完成
     setInterval(function(){
         //把消失的点初始化
         var nextMove = [];
