@@ -22,10 +22,6 @@
         .hide {
             display: none;
         }
-        .score {
-            position: absolute;
-            font-size: 20px;
-        }
         .normal-like {
             background-position: 0px 423px;
         }
@@ -81,18 +77,82 @@
             background-position: 0px 116px;
             display: none;
         }
+        .ding-logo {
+            left: 0px;
+            width: 71px;
+            height: 58px;
+            background-position: 0px 0px;
+            animation: dingMove 1s infinite alternate;
+            -webkit-animation: dingMove 1s infinite alternate; /*Safari and Chrome*/
+        }
+        @keyframes dingMove {
+            from {top:0px;}
+            to {top:20px;}
+        }
+        @-webkit-keyframes dingMove {
+            from {top:0px;}
+            to {top:20px;}
+        }
+        .score-logo {
+            top: 9px;
+            right: 123px;
+            width: 82px;
+            height: 33px;
+            border-radius: 0;
+            background-position: 0px -262px;
+        }
+        .score-logo span {
+            position: relative;
+            font-size: 20px;
+            left: 5px;
+            top: 5px;
+            transform:translateZ(0);
+            display: inline-block;
+        }
+        .time-logo {
+            top: 9px;
+            right: 8px;
+            width: 107px;
+            height: 33px;
+            border-radius: 0;
+            background-position: 0px -294px;
+        }
+        .time-logo span {
+            position: relative;
+            font-size: 20px;
+            left: 5px;
+            top: 5px;
+            transform:translateZ(0);
+            display: inline-block;
+        }
+        .countdown {
+            animation: timeCount 0.5s infinite alternate;
+            -webkit-animation: timeCount 0.5s infinite alternate; /*Safari and Chrome*/
+        }
+        @keyframes timeCount {
+            from {top:5px;font-size: 20px}
+            to {top:-9px;font-size: 50px}
+        }
+        @-webkit-keyframes timeCount {
+            from {top:0px;}
+            to {top:20px;}
+        }
     </style>
     <meta charset="UTF-8">
     <title></title>
 </head>
 <body>
-<span class="score">0</span>
+<div class="score-logo"><span class="score">0</span></div>
+<div class="time-logo"><span class="time">0</span></div>
+<div class="ding-logo"></div>
 <script src="../jquery-3.0.0.js"></script>
 <script>
     var collectThumbs = {
         score: 0,
         initWidth: window.screen.width - 60,
-        html: ''
+        html: '',
+        height: window.screen.height - 180,
+        time: 20
     };
     //构造池子,这里改成join
     for(var i =0; i < 4; i++){
@@ -165,13 +225,23 @@
     //move
     function move(nextMove){
         var a = nextMove;
-        var height = 500;
         for(var i = 0; i < nextMove.length; i++){
             nextMove[i].removeClass('hide');
-            nextMove[i].animate({top:height+'px'} ,1000 + 3000 * Math.random() ,'linear',function(){
+            nextMove[i].animate({top:collectThumbs.height + 'px'}, 1000 + 3000 * Math.random(), 'linear', function(){
                 if(!$(this).hasClass('hide')){$(this).addClass('hide');}
             });
         }
+    }
+
+    function timeChange(){
+        collectThumbs.time --;
+        if(collectThumbs.time == 10){
+            $('.time').addClass('countdown');
+        }
+        if(collectThumbs.time <= 0 ){
+            window.location.href = "https://emperorfront.github.io/collectThumbs/v2/"
+        }
+        $('.time').html(collectThumbs.time);
     }
 
     //当选点消失，自己悄悄的异步修改其起始位置即可
@@ -185,6 +255,7 @@
         });
         //move
         move(nextMove);
+        timeChange();
     },1000);
 </script>
 </body>
