@@ -14,8 +14,8 @@
             background-image: url("thumbs.png");
             transform:translateZ(0);
             position: absolute;
-            width: 57px;
-            height: 66px;
+            width: 73px;
+            height: 75px;
             border-radius: 1rem;
             display: inline-block;
         }
@@ -23,64 +23,64 @@
             display: none;
         }
         .normal-like {
-            background-position: 0px 423px;
+            background-position: -106px 0px;
         }
         .middle-like {
-            background-position: 0px 355px;
+            background-position: -191px 0px;
         }
         .heigh-like {
-            background-position: 0px 288px;
+            background-position: -278px 0px;
         }
         .like-ad1 {
             width: 24px;
             height: 24px;
             border-radius: 4px;
-            background-position: 0px -385px;
+            background-position: 0px -181px;
             display: none;
         }
         .like-ad2 {
             width: 24px;
             height: 24px;
             border-radius: 4px;
-            background-position: 0px -410px;
+            background-position: 0px -206px;
             display: none;
         }
         .like-ad3 {
             width: 24px;
             height: 24px;
             border-radius: 4px;
-            background-position: 0px -434px;
+            background-position: 0px -231px;
             display: none;
         }
         .like-ad4 {
             width: 24px;
             height: 24px;
             border-radius: 4px;
-            background-position: 0px -459px;
+            background-position: 0px -256px;
             display: none;
         }
         .plus10 {
             width: 33px;
             height: 18px;
-            background-position: 0px 154px;
+            background-position: 0px -124px;
             display: none;
         }
         .plus5 {
             width: 33px;
             height: 18px;
-            background-position: 0px 135px;
+            background-position: 0px -143px;
             display: none;
         }
         .plus1 {
             width: 26px;
             height: 18px;
-            background-position: 0px 116px;
+            background-position: 0px -162px;
             display: none;
         }
         .ding-logo {
             left: 0px;
             width: 71px;
-            height: 58px;
+            height: 57px;
             background-position: 0px 0px;
             animation: dingMove 1s infinite alternate;
             -webkit-animation: dingMove 1s infinite alternate; /*Safari and Chrome*/
@@ -99,7 +99,7 @@
             width: 82px;
             height: 33px;
             border-radius: 0;
-            background-position: 0px -262px;
+            background-position: 0px -58px;
         }
         .score-logo span {
             position: relative;
@@ -115,7 +115,7 @@
             width: 107px;
             height: 33px;
             border-radius: 0;
-            background-position: 0px -294px;
+            background-position: 0px -91px;
         }
         .time-logo span {
             position: relative;
@@ -134,8 +134,28 @@
             to {top:-9px;font-size: 50px}
         }
         @-webkit-keyframes timeCount {
-            from {top:5px;font-size: 20px}
-            to {top:-9px;font-size: 50px}
+            from {top:0px;}
+            to {top:20px;}
+        }
+        .explosion {
+            -webkit-animation: explosion 0.5s steps(6);
+            animation: explosion 0.5s steps(6);
+        }
+        @-webkit-keyframes explosion {
+            0% {
+                background-position-y: 0;
+            }
+            100% {
+                background-position-y: -476px;
+            }
+        }
+        @keyframes explosion {
+            0% {
+                background-position-y: 0;
+            }
+            100% {
+                background-position-y: -476px;
+            }
         }
     </style>
     <meta charset="UTF-8">
@@ -174,14 +194,17 @@
     $('body').prepend(collectThumbs.html);
     //得分逻辑
     $('.normal-like').bind('touchstart', function(){
+        if(!$(this).hasClass('explosion'))
         showScorePlus($(this),1);
     });
 
     $('.middle-like').bind('touchstart', function(){
+        if(!$(this).hasClass('explosion'))
         showScorePlus($(this),5);
     });
 
     $('.heigh-like').bind('touchstart', function(){
+        if(!$(this).hasClass('explosion'))
         showScorePlus($(this),10);
     });
     function showScorePlus(_this,_score){
@@ -191,7 +214,7 @@
         var theAd;
         switch(_score){
             case 1:
-                thePlus = $('.plus1:first');
+                thePlus = $('.plus1:hidden:first');
                 break;
             case 5:
                 thePlus = $('.plus5:first');
@@ -202,6 +225,9 @@
                 theAd = $('.like-ad' + ( 1 + parseInt(4 * Math.random())));
                 break;
         }
+        //爆炸效果
+        _this.addClass('explosion');
+        //加分效果
         thePlus.css({ 'top':_this.position().top, 'left':_this.position().left + 40 });
         thePlus.fadeToggle('slow');
         if(theAd){
@@ -210,16 +236,19 @@
             theAd.fadeToggle('slow');
         }
         thePlus.fadeToggle('slow');
-
-        _this.addClass('hide');
+        _this.stop();
+        setTimeout(function(){
+            _this.removeClass('explosion');
+            _this.addClass('hide');
+            //重新定位
+            _this.css('left', Math.ceil(collectThumbs.initWidth * Math.random()) + 'px');
+        },500);
 
         //展示分数，中断动画
         collectThumbs.score += _score;
         $('.score').html(collectThumbs.score);
-        _this.stop();
 
-        //重新定位
-        _this.css('left', Math.ceil(collectThumbs.initWidth * Math.random()) + 'px');
+
     }
 
     //move
@@ -239,7 +268,7 @@
             $('.time').addClass('countdown');
         }
         if(collectThumbs.time <= 0 ){
-            window.location.href = "https://emperorfront.github.io/collectThumbs/v2/"
+//            window.location.href = "http://localhost:63342/pumpMouse/demo/divRbackArea.html"
         }
         $('.time').html(collectThumbs.time);
     }
@@ -256,7 +285,7 @@
         //move
         move(nextMove);
         timeChange();
-    },1000);
+    },500);
 </script>
 </body>
 </html>
