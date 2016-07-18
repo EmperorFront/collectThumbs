@@ -9,6 +9,7 @@
             overflow-x: hidden;
             background-image: url("bg-sky.png");
             background-size: cover;
+            user-select: none;
         }
         div {
             background-image: url("thumbs.png");
@@ -134,8 +135,8 @@
             to {top:-9px;font-size: 50px}
         }
         @-webkit-keyframes timeCount {
-            from {top:0px;}
-            to {top:20px;}
+            from {top:5px;font-size: 20px}
+            to {top:-9px;font-size: 50px}
         }
         .explosion {
             -webkit-animation: explosion 0.5s steps(6);
@@ -273,6 +274,8 @@
         $('.time').html(collectThumbs.time);
     }
 
+    setInterval(timeChange,1000);
+
     //当选点消失，自己悄悄的异步修改其起始位置即可
     //研究，这里的操作能否分多个帧完成
     setInterval(function(){
@@ -284,7 +287,6 @@
         });
         //move
         move(nextMove);
-        timeChange();
     },500);
 </script>
 </body>
