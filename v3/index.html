@@ -215,6 +215,9 @@
 <div class="ding-logo"></div>
 <script src="../jquery-3.0.0.js"></script>
 <script>
+    document.body.addEventListener("touchmove", function(e){
+    	e.preventDefault();
+    }, true);
     var collectThumbs = {
         score: 0,
         initWidth: window.screen.width - 80,
