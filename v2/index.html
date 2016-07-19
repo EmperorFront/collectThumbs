@@ -97,6 +97,16 @@
             from {top:0px;}
             to {top:20px;}
         }
+        .flow-up {
+            animation: scoreUp 0.7s 1 alternate;
+            -webkit-animation: scoreUp 0.7s 1 alternate; /*Safari and Chrome*/
+        }
+        @keyframes scoreUp {
+            to {transform:translate(0px,-15px);}
+        }
+        @-webkit-keyframes scoreUp {
+            to {transform:translate(0px,-15px);}
+        }
         .score-logo {
             top: 9px;
             right: 123px;
@@ -171,7 +181,7 @@
 <script>
     var collectThumbs = {
         score: 0,
-        initWidth: window.screen.width - 60,
+        initWidth: window.screen.width - 80,
         html: '',
         height: window.screen.height - 180,
         time: 20
@@ -231,13 +241,15 @@
         _this.addClass('explosion');
         //加分效果
         thePlus.css({ 'top':_this.position().top, 'left':_this.position().left + 40 });
-        thePlus.fadeToggle('slow');
+        thePlus.addClass('flow-up');
+        thePlus.fadeToggle(300);
         if(theAd){
             theAd.css({ 'top':_this.position().top - 5, 'left':_this.position().left + 75 });
-            theAd.fadeToggle('slow');
-            theAd.fadeToggle('slow');
+            theAd.addClass('flow-up');
+            theAd.fadeToggle(300);
+            theAd.fadeToggle(450);
         }
-        thePlus.fadeToggle('slow');
+        thePlus.fadeToggle(450);
         _this.stop();
         setTimeout(function(){
             _this.removeClass('explosion');
