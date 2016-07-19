@@ -215,9 +215,9 @@
 <div class="ding-logo"></div>
 <script src="../jquery-3.0.0.js"></script>
 <script>
-document.body.addEventListener('touchmove', function (event) {
-    event.preventDefault();
-}, false);
+document.body.addEventListener("touchmove", function(e){
+	e.preventDefault();
+}, true);
     var collectThumbs = {
         score: 0,
         initWidth: window.screen.width - 80,
@@ -247,19 +247,16 @@ document.body.addEventListener('touchmove', function (event) {
     $('.normal-like').bind('touchstart', function(){
         if(!$(this).hasClass('explosion'))
         showScorePlus($(this),1);
-        e.preventDefault();
     });
 
     $('.middle-like').bind('touchstart', function(){
         if(!$(this).hasClass('explosion'))
         showScorePlus($(this),5);
-        e.preventDefault();
     });
 
     $('.heigh-like').bind('touchstart', function(){
         if(!$(this).hasClass('explosion'))
         showScorePlus($(this),10);
-        e.preventDefault();
     });
     function showScorePlus(_this,_score){
         //每次创建都要新的并回收，这里可以全局化
