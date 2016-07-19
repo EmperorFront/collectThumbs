@@ -209,15 +209,12 @@
     <meta charset="UTF-8">
     <title></title>
 </head>
-<body ontouchmove="event.preventDefault()">
+<body>
 <div class="score-logo"><span class="score">0</span></div>
 <div class="time-logo"><span class="time">0</span></div>
 <div class="ding-logo"></div>
 <script src="../jquery-3.0.0.js"></script>
 <script>
-document.body.addEventListener("touchmove", function(e){
-	e.preventDefault();
-}, true);
     var collectThumbs = {
         score: 0,
         initWidth: window.screen.width - 80,
@@ -225,6 +222,7 @@ document.body.addEventListener("touchmove", function(e){
         height: window.screen.height - 180,
         time: 20
     };
+    $('body').height(window.screen.height);
     //构造池子,这里改成join
     for(var i =0; i < 4; i++){
         collectThumbs.html += "<div class='normal-like hide' style='left:" + Math.ceil(collectThumbs.initWidth * Math.random()) + "px'></div>";
@@ -309,9 +307,9 @@ document.body.addEventListener("touchmove", function(e){
         var a = nextMove;
         for(var i = 0; i < nextMove.length; i++){
             nextMove[i].removeClass('hide');
-            nextMove[i].animate({top:collectThumbs.height + 'px'}, 1000 + 3000 * Math.random(), 'linear', function(){
+           nextMove[i].animate({top:collectThumbs.height + 'px'}, 1000 + 3000 * Math.random(), 'linear', function(){
                 if(!$(this).hasClass('hide')){$(this).addClass('hide');}
-            });
+           });
         }
     }
 
@@ -321,7 +319,7 @@ document.body.addEventListener("touchmove", function(e){
             $('.time').addClass('countdown');
         }
         if(collectThumbs.time <= 0 ){
-    //        window.location.href = "https://emperorfront.github.io/collectThumbs/v3/"
+//            window.location.href = "http://localhost:63342/pumpMouse/demo/divRbackArea.html"
         }
         $('.time').html(collectThumbs.time);
     }
