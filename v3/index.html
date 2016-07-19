@@ -247,16 +247,19 @@ document.body.addEventListener('touchmove', function (event) {
     $('.normal-like').bind('touchstart', function(){
         if(!$(this).hasClass('explosion'))
         showScorePlus($(this),1);
+        e.preventDefault();
     });
 
     $('.middle-like').bind('touchstart', function(){
         if(!$(this).hasClass('explosion'))
         showScorePlus($(this),5);
+        e.preventDefault();
     });
 
     $('.heigh-like').bind('touchstart', function(){
         if(!$(this).hasClass('explosion'))
         showScorePlus($(this),10);
+        e.preventDefault();
     });
     function showScorePlus(_this,_score){
         //每次创建都要新的并回收，这里可以全局化
