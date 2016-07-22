@@ -179,7 +179,7 @@
     <meta charset="UTF-8">
     <title></title>
 </head>
-<body>
+<body ontouchmove="event.preventDefault()">
 <div class="collect-thumbs">
 </div>
 <script src="../jquery-3.0.0.js"></script>
@@ -305,7 +305,7 @@
 //                lewen3_app.show_failure();
             }
             $('.collect-thumbs').html('');
-            gemeStart();
+            gameStart();
         }
         $('.time').html(collectThumbs.time);
     }
