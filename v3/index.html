@@ -293,7 +293,7 @@
         for(var i = 0; i < nextMove.length; i++){
             nextMove[i].removeClass('opacity-hide');
             nextMove[i].animate({top:collectThumbs.height + 'px'}, 1000 + 3000 * Math.random(), 'linear', function(){
-                if(!$(this).hasClass('opacity-hide')){$(this).addClass('hide');}
+                if(!$(this).hasClass('opacity-hide')){$(this).addClass('opacity-hide');}
             });
         }
     }
