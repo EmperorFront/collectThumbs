@@ -28,8 +28,8 @@
             border-radius: 1rem;
             display: inline-block;
         }
-        .hide {
-            display: none;
+        .opacity-hide {
+            opacity: 0;
         }
         .normal-like {
             background-position: -106px 0px;
@@ -96,12 +96,10 @@
             -webkit-animation: dingMove 1s infinite alternate; /*Safari and Chrome*/
         }
         @keyframes dingMove {
-            from {top:0px;}
-            to {top:20px;}
+            to {transform:translateY(20px);}
         }
         @-webkit-keyframes dingMove {
-            from {top:0px;}
-            to {top:20px;}
+            to {transform:translateY(20px);}
         }
         .flow-up {
             animation: scoreUp 0.7s 1 alternate;
@@ -180,16 +178,23 @@
     <title></title>
 </head>
 <body ontouchmove="event.preventDefault()">
-<code style="display:block"><div class="collect-thumbs"></div></code>
+<div class="collect-thumbs">
+</div>
 <script src="../jquery-3.0.0.js"></script>
 <script>
+    document.ontouchmove = function(event){
+        event.preventDefault();
+    }
     var collectThumbs = {
         score: 0,
         initWidth: window.screen.width - 80,
         html: '',
         height: window.screen.height - 180,
-        time: 1,
+        time: 20,
         flag: 1,
+        timeInterval: function(){
+            setInterval(timeChange,1000)
+        },
         init: function(){
             collectThumbs.score = 0;
             collectThumbs.time = 20;
@@ -199,14 +204,14 @@
 
             //构造池子,这里改成join
             for(var i =0; i < 4; i++){
-                collectThumbs.html += "<div class='normal-like hide sprite-merge' style='left:" + Math.ceil(collectThumbs.initWidth * Math.random()) + "px'></div>";
+                collectThumbs.html += "<div class='normal-like opacity-hide sprite-merge' style='left:0; transform:translateX(" + Math.ceil(collectThumbs.initWidth * Math.random()) + "px)'></div>";
             }
             for (var i =0; i < 1; i++){
-                collectThumbs.html += "<div class='middle-like middle-like" + Math.ceil(10 * Math.random()) + " hide sprite-merge' style='left:" + Math.ceil(collectThumbs.initWidth * Math.random()) + "px'></div>";
+                collectThumbs.html += "<div class='middle-like middle-like" + Math.ceil(10 * Math.random()) + " opacity-hide sprite-merge' style='left:0; transform:translateX(" + Math.ceil(collectThumbs.initWidth * Math.random()) + "px)'></div>";
                 collectThumbs.html += "<div class='plus plus5 sprite-merge'></div>";
             }
             for (var i =0; i < 1; i++){
-                collectThumbs.html += "<div class='heigh-like heigh-like" + Math.ceil(10 * Math.random()) + " hide sprite-merge' style='left:" + Math.ceil(collectThumbs.initWidth * Math.random()) + "px'></div>";
+                collectThumbs.html += "<div class='heigh-like heigh-like" + Math.ceil(10 * Math.random()) + " opacity-hide sprite-merge' style='left:0; transform:translateX(" + Math.ceil(collectThumbs.initWidth * Math.random()) + "px)'></div>";
                 collectThumbs.html += "<div class='plus plus10 sprite-merge'></div>";
             }
             for (var i =0; i < 3; i++){
@@ -234,6 +239,8 @@
             });
         }
     };
+    //开始计时
+    collectThumbs.timeInterval();
     function showScorePlus(_this,_score){
         //每次创建都要新的并回收，这里可以全局化
         //展示加分及广告
@@ -268,9 +275,9 @@
         _this.stop();
         setTimeout(function(){
             _this.removeClass('explosion');
-            _this.addClass('hide');
+            _this.addClass('opacity-hide');
             //重新定位
-            _this.css('left', Math.ceil(collectThumbs.initWidth * Math.random()) + 'px');
+            _this.css('transform', 'translateX('+Math.ceil(collectThumbs.initWidth * Math.random()) + 'px)');
         },470);
 
         //展示分数，中断动画
@@ -284,9 +291,9 @@
     function move(nextMove){
         var a = nextMove;
         for(var i = 0; i < nextMove.length; i++){
-            nextMove[i].removeClass('hide');
+            nextMove[i].removeClass('opacity-hide');
             nextMove[i].animate({top:collectThumbs.height + 'px'}, 1000 + 3000 * Math.random(), 'linear', function(){
-                if(!$(this).hasClass('hide')){$(this).addClass('hide');}
+                if(!$(this).hasClass('opacity-hide')){$(this).addClass('hide');}
             });
         }
     }
@@ -303,23 +310,21 @@
             }else{
 //                lewen3_app.show_failure();
             }
-            $('.collect-thumbs').html('');
-            gameStart();
+//            $('.collect-thumbs').html('');
+//            gameStart();
         }
         $('.time').html(collectThumbs.time);
     }
 
     function gameStart(){
         collectThumbs.init();
-        //开始计时
-        setInterval(timeChange,1000);
 
         //当选点消失，自己悄悄的异步修改其起始位置即可
         //研究，这里的操作能否分多个帧完成
         setInterval(function(){
             //把消失的点初始化
             var nextMove = [];
-            $('.collect-thumbs .hide').each(function(){
+            $('.collect-thumbs .opacity-hide').each(function(){
                 $(this).css("top","0px");
                 nextMove.push($(this));
             });
