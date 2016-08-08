@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+    <style>
+        body{
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            margin: 0;
+        }
+        .collect-thumbs {
+            color: #f3f3f8;
+            text-align: center;
+            overflow-x: hidden;
+            background-image: url("bg-sky.png");
+            background-size: cover;
+            height:100%;
+        }
+        .sprite-merge {
+            background-size:386px 567px;
+            background-image: url("thumbs.png");
+            transform:translateZ(0);
+            position: absolute;
+            width: 73px;
+            height: 75px;
+            border-radius: 1rem;
+            display: inline-block;
+        }
+        .hide {
+            display: none;
+        }
+        .normal-like {
+            background-position: -106px 0px;
+        }
+        .middle-like {
+            background-position: -191px 0px;
+        }
+        .heigh-like {
+            background-position: -278px 0px;
+        }
+        .ad-sprite {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            display: none;
+        }
+        .like-ad1 {
+            background-position: 0px -175px;
+        }
+        .like-ad2 {
+            background-position: 0px -198px;
+        }
+        .like-ad3 {
+            background-position: 0px -222px;
+        }
+        .like-ad4 {
+            background-position: 0px -245px;
+        }
+        .like-ad5 {
+            background-position: 0px -269px;
+        }
+        .like-ad6 {
+            background-position: 0px -293px;
+        }
+        .like-ad7 {
+            background-position: 0px -316px;
+        }
+        .like-ad8 {
+            background-position: 0px -340px;
+        }
+        .like-ad9 {
+            background-position: 0px -364px;
+        }
+        .plus {
+            width: 33px;
+            height: 18px;
+            display: none;
+        }
+        .plus10 {
+            background-position: 0px -140px;
+        }
+        .plus5 {
+            background-position: 0px -140px;
+        }
+        .plus1 {
+            background-position: 0px -157px;
+        }
+        .ding-logo {
+            left: 0px;
+            width: 71px;
+            height: 57px;
+            background-position: 0px 0px;
+            animation: dingMove 1s infinite alternate;
+            -webkit-animation: dingMove 1s infinite alternate;
+        }
+        @keyframes dingMove {
+            from {top:0px;}
+            to {top:20px;}
+        }
+        @-webkit-keyframes dingMove {
+            from {top:0px;}
+            to {top:20px;}
+        }
+        .flow-up {
+            animation: scoreUp 0.7s 1 alternate;
+            -webkit-animation: scoreUp 0.7s 1 alternate;
+        }
+        @keyframes scoreUp {
+            to {transform:translate(0px,-15px);}
+        }
+        @-webkit-keyframes scoreUp {
+            to {transform:translate(0px,-15px);}
+        }
+        .score-logo {
+            top: 9px;
+            right: 123px;
+            width: 82px;
+            height: 33px;
+            border-radius: 0;
+            background-position: 0px -57px;
+            font-family: lewen3;
+        }
+        .score-logo span {
+            position: relative;
+            font-size: 20px;
+            left: 5px;
+            top: 10px;
+            transform:translateZ(0);
+            display: inline-block;
+        }
+        .time-logo {
+            top: 9px;
+            right: 8px;
+            width: 107px;
+            height: 32px;
+            border-radius: 0;
+            background-position: 0px -90px;
+            font-family: lewen3;
+        }
+        .time-logo span {
+            position: relative;
+            font-size: 20px;
+            left: 5px;
+            top: 10px;
+            transform:translateZ(0);
+            display: inline-block;
+        }
+        .countdown {
+            animation: timeCount 0.5s infinite alternate;
+            -webkit-animation: timeCount 0.5s infinite alternate; /*Safari and Chrome*/
+        }
+        @keyframes timeCount {
+            to {transform:scale(3,3)}
+        }
+        @-webkit-keyframes timeCount {
+            to {transform:scale(3,3)}
+        }
+        .explosion {
+            -webkit-animation: explosion 0.6s steps(6) forwards;
+            animation: explosion 0.6s steps(6) forwards;
+        }
+        @-webkit-keyframes explosion {
+            0% {
+                background-position-y: 0;
+            }
+            100% {
+                background-position-y: -476px;
+            }
+        }
+        @keyframes explosion {
+            0% {
+                background-position-y: 0;
+            }
+            100% {
+                background-position-y: -476px;
+            }
+        }
+    </style>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body ontouchmove="event.preventDefault()">
+<div class="collect-thumbs">
+</div>
+<script src="../jquery-3.0.0.js"></script>
+<script>
+    // 游戏部分代码
+    document.body.addEventListener("touchmove", function(e){
+        e.preventDefault();
+    }, true);
+    var collectThumbs = {
+        score: 0,
+        initWidth: window.screen.width - 80,
+        html: '',
+        height: window.screen.height - 180,
+        time: 20,
+        flag: 1,
+        timeInterval: 0,
+        currTicket: (new Date()).valueOf(),
+        init: function(){
+            collectThumbs.score = 0;
+            collectThumbs.time = 20;
+            collectThumbs.flag = 1;
+            $('.collect-thumbs').height(window.screen.height);
+            collectThumbs.html = '<div class="score-logo sprite-merge"><span class="score">0</span></div><div class="time-logo sprite-merge"><span class="time">0</span></div><div class="ding-logo sprite-merge"></div>';
+
+            //构造池子,这里改成join
+            for(var i =0; i < 4; i++){
+                collectThumbs.html += "<div class='normal-like hide sprite-merge' style='left:" + Math.ceil(collectThumbs.initWidth * Math.random()) + "px'></div>";
+            }
+            for (var i =0; i < 1; i++){
+                collectThumbs.html += "<div class='middle-like middle-like" + Math.ceil(10 * Math.random()) + " hide sprite-merge' style='left:" + Math.ceil(collectThumbs.initWidth * Math.random()) + "px'></div>";
+                collectThumbs.html += "<div class='plus plus5 sprite-merge'></div>";
+            }
+            for (var i =0; i < 1; i++){
+                collectThumbs.html += "<div class='heigh-like heigh-like" + Math.ceil(10 * Math.random()) + " hide sprite-merge' style='left:" + Math.ceil(collectThumbs.initWidth * Math.random()) + "px'></div>";
+                collectThumbs.html += "<div class='plus plus10 sprite-merge'></div>";
+            }
+            for (var i =0; i < 3; i++){
+                //产品还没定型，猜测加5,10，可能没有这么多，因此拿到赞那里初始化
+                collectThumbs.html += "<div class='plus plus1 sprite-merge'></div>";
+            }
+            for(var i=1; i < 10; i++){
+                collectThumbs.html += "<div class='ad-sprite like-ad" + i + " sprite-merge'></div>";
+            }
+            $('.collect-thumbs').html(collectThumbs.html);
+            //得分逻辑
+            var _this;
+            $('.normal-like').bind('touchstart', function(){
+                _this = $(this);
+                if(!_this.hasClass('explosion'))
+                    showScorePlus(_this,1);
+            });
+
+            $('.middle-like').bind('touchstart', function(){
+                _this = $(this);
+                if(!_this.hasClass('explosion'))
+                    showScorePlus(_this,5);
+            });
+
+            $('.heigh-like').bind('touchstart', function(){
+                _this = $(this);
+                if(!_this.hasClass('explosion'))
+                    showScorePlus(_this,10);
+            });
+        }
+    };
+    function showScorePlus(_this,_score){
+        //每次创建都要新的并回收，这里可以全局化
+        //展示加分及广告
+        var thePlus;
+        var theAd;
+        switch(_score){
+            case 1:
+                thePlus = $('.plus1:hidden:first');
+                break;
+            case 5:
+                thePlus = $('.plus5:first');
+                theAd = $('.like-ad' + ( 1 + parseInt(9 * Math.random())));
+                break;
+            case 10:
+                thePlus = $('.plus10:first');
+                theAd = $('.like-ad' + ( 1 + parseInt(9 * Math.random())));
+                _score = 5;
+                break;
+        }
+        //爆炸效果
+        _this.addClass('explosion');
+        //加分效果
+        thePlus.css({ 'top':_this.position().top, 'left':_this.position().left + 40 });
+        thePlus.addClass('flow-up');
+        thePlus.fadeToggle(300);
+        if(theAd){
+            theAd.css({ 'top':_this.position().top - 5, 'left':_this.position().left + 75 });
+            theAd.addClass('flow-up');
+            theAd.fadeToggle(300);
+            theAd.fadeToggle(450);
+        }
+        thePlus.fadeToggle(470);
+        _this.stop();
+        setTimeout(function(){
+            _this.addClass('hide');
+            _this.removeClass('explosion');
+            //重新定位
+            _this.css('left', Math.ceil(collectThumbs.initWidth * Math.random()) + 'px');
+        },470);
+
+        //展示分数，中断动画
+        collectThumbs.score += _score;
+        $('.score').html(collectThumbs.score);
+
+
+    }
+    //move
+    function move(nextMove){
+        var a = nextMove;
+        for(var i = 0; i < nextMove.length && i < ( 21 - collectThumbs.time ); i++){
+            nextMove[i].removeClass('hide');
+            nextMove[i].animate({top:collectThumbs.height + 'px'}, 1500 + 1500 * Math.random(), 'linear', function(){
+                if(!$(this).hasClass('hide')){$(this).addClass('hide');}
+            });
+        }
+    }
+    function timeChange(){
+        collectThumbs.time --;
+        if(collectThumbs.time == 5){
+            $('.time').addClass('countdown');
+        }
+        if(collectThumbs.time <= 0 && collectThumbs.flag){
+            collectThumbs.flag = 0;
+            if(collectThumbs.score >= 100){
+//                lewen3_app.game_finish(collectThumbs.score);
+            }else{
+//                lewen3_app.game_finish(collectThumbs.score);
+            }
+            clearTimeout(collectThumbs.timeInterval);
+            $('.collect-thumbs').html('');
+        }
+        $('.time').html(collectThumbs.time);
+    }
+    function gameStart(){
+        collectThumbs.init();
+        //andriod手K规避左右滑动的问题
+        if (typeof km_util != 'undefined') {
+            km_util.go_back = function(){};
+        }
+        //开始计时
+        collectThumbs.timeInterval = setInterval(timeChange,1000);
+        //当选点消失，自己悄悄的异步修改其起始位置即可
+        //研究，这里的操作能否分多个帧完成
+        requestAnimationFrame(animationRender);
+        function animationRender() {
+            var now = (new Date()).valueOf();
+            if(now - collectThumbs.currTicket > 500) {
+                collectThumbs.currTicket = now;
+                //把消失的点初始化
+                var nextMove = [];
+                $('.collect-thumbs .hide').each(function(){
+                    $(this).css("top", "0px");
+                    nextMove.push($(this));
+                });
+                //move
+                move(nextMove);
+            }
+            requestAnimationFrame(animationRender);
+        }
+    }
+    gameStart();
+</script>
+</body>
+</html>
