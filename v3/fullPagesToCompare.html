@@ -626,6 +626,7 @@
         document.body.addEventListener("touchmove", function(e){
             e.preventDefault();
         }, true);
+	window.event? window.event.cancelBubble = true : e.stopPropagation();
         var collectThumbs = {
             score: 0,
             initWidth: window.screen.width - 80,
@@ -665,22 +666,25 @@
                 $('.collect-thumbs').html(collectThumbs.html);
                 //得分逻辑
                 var _this;
-                $('.normal-like').bind('touchstart', function(){
+                $('.normal-like').bind('touchstart', function(e){
                     _this = $(this);
                     if(!_this.hasClass('explosion'))
                         showScorePlus(_this,1);
+                    return false;
                 });
 
                 $('.middle-like').bind('touchstart', function(){
                     _this = $(this);
                     if(!_this.hasClass('explosion'))
                         showScorePlus(_this,5);
+	            return false;
                 });
 
                 $('.heigh-like').bind('touchstart', function(){
                     _this = $(this);
                     if(!_this.hasClass('explosion'))
                         showScorePlus(_this,10);
+                    return false;
                 });
             }
         };
