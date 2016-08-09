@@ -92,7 +92,7 @@
         <!-- 游戏界面 -->
         <div class="absolute screen lewen3-game-page" style="height: 736px; width: 414px;">
             <!-- 游戏模块 -->
-            <div class="collect-thumbs" style="height: 736px;"><div class="score-logo sprite-merge"><span class="score">0</span></div><div class="time-logo sprite-merge"><span class="time">16</span></div><div class="ding-logo sprite-merge"></div><div class="normal-like sprite-merge" style="left: 61px; top: 480.702px;"></div><div class="normal-like sprite-merge" style="left: 133px; top: 279.671px;"></div><div class="normal-like sprite-merge" style="left: 137px; top: 260.649px;"></div><div class="normal-like sprite-merge" style="left: 191px; top: 259.639px;"></div><div class="middle-like middle-like7 sprite-merge" style="left: 252px; top: 64.8656px;"></div><div class="plus plus5 sprite-merge"></div><div class="heigh-like heigh-like7 sprite-merge" style="left: 266px; top: 206.638px;"></div><div class="plus plus10 sprite-merge"></div><div class="plus plus1 sprite-merge"></div><div class="plus plus1 sprite-merge"></div><div class="plus plus1 sprite-merge"></div><div class="ad-sprite like-ad1 sprite-merge"></div><div class="ad-sprite like-ad2 sprite-merge"></div><div class="ad-sprite like-ad3 sprite-merge"></div><div class="ad-sprite like-ad4 sprite-merge"></div><div class="ad-sprite like-ad5 sprite-merge"></div><div class="ad-sprite like-ad6 sprite-merge"></div><div class="ad-sprite like-ad7 sprite-merge"></div><div class="ad-sprite like-ad8 sprite-merge"></div><div class="ad-sprite like-ad9 sprite-merge"></div></div>
+            <div class="collect-thumbs"></div>
         </div>
 
         <!-- 游戏后页面 -->
@@ -568,6 +568,7 @@
                     $('.lewen3-game-page-cover').addClass('hide');
 
                     // 重启游戏
+                    $('body').html('<div class="absolute screen lewen3-game-page" style="height: 736px; width: 414px;"><div class="collect-thumbs"></div></div>');
                     setTimeout(gameStart, 1000);
                 });
 
