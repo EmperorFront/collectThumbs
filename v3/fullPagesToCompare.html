@@ -624,9 +624,10 @@
 
         // 游戏部分代码
         document.body.addEventListener("touchmove", function(e){
-            e.preventDefault();
+            e.preventDefault();	
+            window.event? window.event.cancelBubble = true : e.stopPropagation();
         }, true);
-	window.event? window.event.cancelBubble = true : e.stopPropagation();
+
         var collectThumbs = {
             score: 0,
             initWidth: window.screen.width - 80,
